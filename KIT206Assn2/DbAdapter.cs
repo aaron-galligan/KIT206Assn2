@@ -43,6 +43,46 @@ namespace Assignemt_2
         }
 
 
+
+        /* commented out so that i can push this
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+        public static List<Researcher> fetchBasicResearcherDetails()
+        {
+
+        }
+
+
+        public static int fetchFullResearcherDetails()
+        {
+
+        }
+
+
+        public static Researcher fetchBasicPublicationDetails()
+        {
+
+        }
+
+        public static Publication completePublicationDetails()
+        {
+
+        }
+
+
+        public static List<int> fetchPublicaionCount()
+        {
+
+        }
+        */
+
+
+
         public static List<object> LoadResearchers()
         {
             List<object> Researchers = new List<object>();
@@ -74,7 +114,10 @@ namespace Assignemt_2
 
                     if (Type == "Staff")
                     {
-                        List<String> Students = LoadStdntSupervised(cmd, rdr.GetInt32(0));
+                        int staffId = rdr.GetInt32(0);
+                        rdr.Close();
+                        List<String> Students = LoadStdntSupervised(cmd, staffId);
+                        rdr = cmd.ExecuteReader();
 
                         Researchers.Add(new Staff
                         {
@@ -90,7 +133,7 @@ namespace Assignemt_2
                             CommenceInstDate = DateTime.Parse(rdr.GetString(12)),
                             CommencePosDate = DateTime.Parse(rdr.GetString(13)),
                             StudentsSupervised = Students,
-                            Publications = publications
+                            //Publications = publications
                         }); ;
 
 
@@ -112,7 +155,7 @@ namespace Assignemt_2
                             Degree = rdr.GetString(9),
                             CommenceInstDate = DateTime.Parse(rdr.GetString(12)),
                             CommencePosDate = DateTime.Parse(rdr.GetString(13)),
-                            Publications = publications
+                            //Publications = publications
                         });
                     }
                     else
@@ -148,8 +191,6 @@ namespace Assignemt_2
             MySqlCommand cmd = new MySqlCommand("select doi, title, authors, year, type, cite_as, available from publication", conn);
             MySqlDataReader prdr = null;
             List<Publication> publications = new List<Publication>();
-
-
 
 
             try
@@ -197,15 +238,15 @@ namespace Assignemt_2
 
         public static List<String> LoadStdntSupervised(MySqlCommand cmd, int supervisor)
         {
-            MySqlDataReader rdr = cmd.ExecuteReader();
+            MySqlDataReader srdr = cmd.ExecuteReader();
 
             List<String> StudentsSupervised = new List<String>();
 
-            while (rdr.Read())
+            while (srdr.Read())
             {
-                if (rdr.GetInt32(10) == supervisor)
+                if (srdr.GetInt32(10) == supervisor)
                 {
-                    StudentsSupervised.Add(rdr.GetString(2) + " " + rdr.GetString(2));
+                    StudentsSupervised.Add(srdr.GetString(2) + " " + srdr.GetString(2));
                 }
             }
 
