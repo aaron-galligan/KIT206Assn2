@@ -11,7 +11,7 @@ namespace Assignemt_2
         static void Main(string[] args)
         {
 
-            List<object> researchers = DbAdaptor.LoadResearchers();
+            List<object> researchers = DbAdaptor.fetchBasicResearcherDetails();
 
 
 

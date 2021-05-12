@@ -27,9 +27,6 @@ namespace Assignemt_2
         }
 
 
-
-
-
         private static MySqlConnection GetConnection()
         {
             if (conn == null)
@@ -43,64 +40,300 @@ namespace Assignemt_2
         }
 
 
-
-        /* commented out so that i can push this
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
         public static List<Researcher> fetchBasicResearcherDetails()
         {
+            List<Researcher> researchers = new List<Researcher>();
+            
+            MySqlConnection conn = GetConnection();
+            MySqlDataReader rdr = null;
 
+            try
+            {
+                conn.Open();
+                //When referenceing                         0   1     2           3            4
+                MySqlCommand cmd = new MySqlCommand("select id, type, given_name, family_name, title from researcher", conn);
+                rdr = cmd.ExecuteReader();
+
+
+                while (rdr.Read())
+                {
+                    String Type = rdr.GetString(1);
+
+                    if (Type == "Staff")
+                    {
+                        researchers.Add(new Staff
+                        {
+                            Id = rdr.GetInt32(0),
+                            GivenName = rdr.GetString(2),
+                            FamilyName = rdr.GetString(3),
+                            Title = ParseEnum<Title>(rdr.GetString(4))
+                        });
+                    }
+                    else if (Type == "Student")
+                    {
+                        researchers.Add(new Student
+                        {
+                            Id = rdr.GetInt32(0),
+                            GivenName = rdr.GetString(2),
+                            FamilyName = rdr.GetString(3),
+                            Title = ParseEnum<Title>(rdr.GetString(4))
+                        });
+                    }
+                    else
+                    {
+                        Console.WriteLine("Does not have a type");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error loading in basic researcher details:" + e);
+            }
+            finally
+            {
+                if (rdr != null)
+                {
+                    rdr.Close();
+                }
+
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return researchers;
         }
 
 
-        public static int fetchFullResearcherDetails()
+        public static Researcher fetchFullResearcherDetails(int Id)
         {
+            Researcher researcher = new Researcher();
+            
+            MySqlConnection conn = GetConnection();
+            MySqlDataReader rdr = null;
 
+            try
+            {
+                conn.Open();
+                //When referenceing                         0   1     2           3            4      5     6       7      8      9       10             11     12          13
+                MySqlCommand cmd = new MySqlCommand("select id, type, given_name, family_name, title, unit, campus, email, photo, degree, supervisor_id, level, utas_start, current_start from researcher", conn);
+
+                List<String> Students;
+                Students = LoadStdntSupervised(cmd, Id);
+
+                List<Publication> publications;
+                String name = rdr.GetString(2) + " " + rdr.GetString(3);
+                publications = fetchBasicPublicationDetails(conn, name);
+
+                rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    if (rdr.GetInt32(0) == Id)
+                    {
+                        if (rdr.GetString(1) == "Staff")
+                        {
+                            researcher = new Staff
+                            {
+                                Id = rdr.GetInt32(0),
+                                GivenName = rdr.GetString(2),
+                                FamilyName = rdr.GetString(3),
+                                Title = ParseEnum<Title>(rdr.GetString(4)),
+                                Unit = rdr.GetString(5),
+                                Campus = ParseEnum<Campus>(rdr.GetString(6)),
+                                Email = rdr.GetString(7),
+                                Photo = rdr.GetString(8),
+                                level = rdr.GetChar(11),
+                                CommenceInstDate = DateTime.Parse(rdr.GetString(12)),
+                                CommencePosDate = DateTime.Parse(rdr.GetString(13)),
+                                StudentsSupervised = Students,
+                                Publications = publications
+                            };
+                        }
+                        else
+                        {
+                            researcher = new Student
+                            {
+                                Id = rdr.GetInt32(0),
+                                GivenName = rdr.GetString(2),
+                                FamilyName = rdr.GetString(3),
+                                Title = ParseEnum<Title>(rdr.GetString(4)),
+                                Unit = rdr.GetString(5),
+                                Campus = ParseEnum<Campus>(rdr.GetString(6)),
+                                Email = rdr.GetString(7),
+                                Photo = rdr.GetString(8),
+                                Degree = rdr.GetString(9),
+                                CommenceInstDate = DateTime.Parse(rdr.GetString(12)),
+                                CommencePosDate = DateTime.Parse(rdr.GetString(13)),
+                                Publications = publications
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error loading in full researcher details:" + e);
+            }
+            finally
+            {
+                if (rdr != null)
+                {
+                    rdr.Close();
+                }
+
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+
+
+            return researcher;
         }
 
 
-        public static Researcher fetchBasicPublicationDetails()
+        public static List<Publication> fetchBasicPublicationDetails(MySqlConnection conn, String reseacher)
+        {           
+            //When referenceing                          0    1      2        3
+            MySqlCommand cmd = new MySqlCommand("select doi, title, authors, year from publication", conn);
+            MySqlDataReader rdr = null;
+            List<Publication> publications = new List<Publication>();
+
+
+
+            try
+            {
+                rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    if ((rdr.GetString(2)).Contains(reseacher))
+                    {
+                        publications.Add(new Publication
+                        {
+                            Doi = rdr.GetString(0),
+                            Title = rdr.GetString(1),
+                            Authors = rdr.GetString(2),
+                            Year = rdr.GetInt32(3)
+                        });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("error loading publications" + e);
+            }
+            finally
+            {
+                if (rdr != null)
+                {
+                    rdr.Close();
+                }
+            }
+
+            return publications;
+        }
+
+
+        public static Publication completePublicationDetails(Publication publication)
         {
+            MySqlConnection conn = GetConnection();
+            
+            //When referenceing                          0    1      2        3     4     5        6
+            MySqlCommand cmd = new MySqlCommand("select doi, title, authors, year, type, cite_as, available from publication", conn);
+            MySqlDataReader rdr = null;
 
+            try
+            {
+                rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    if (rdr.GetString(0) == publication.Doi)
+                    {
+                        publication = new Publication
+                        {
+                            Doi = rdr.GetString(0),
+                            Title = rdr.GetString(1),
+                            Authors = rdr.GetString(2),
+                            Year = rdr.GetInt32(3),
+                            OutputType = ParseEnum<OutputType>(rdr.GetString(4)),
+                            Citation = rdr.GetString(5),
+                            Available = DateTime.Parse(rdr.GetString(6))
+                        };
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("error loading publications" + e);
+            }
+            finally
+            {
+                if (rdr != null)
+                {
+                    rdr.Close();
+                }
+            }
+
+            return publication;
         }
 
-        public static Publication completePublicationDetails()
-        {
-
-        }
-
-
+        /*
         public static List<int> fetchPublicaionCount()
         {
-
+            MySqlConnection conn = GetConnection();
+            MySqlDataReader rdr = null;
         }
         */
 
+        public static List<String> LoadStdntSupervised(MySqlCommand cmd, int supervisor)
+        {
+            MySqlDataReader srdr = cmd.ExecuteReader();
+
+            List<String> StudentsSupervised = new List<String>();
+
+            while (srdr.Read())
+            {
+                if (srdr.GetInt32(10) == supervisor)
+                {
+                    StudentsSupervised.Add(srdr.GetString(2) + " " + srdr.GetString(2));
+                }
+            }
+
+            return StudentsSupervised;
+        }
 
 
+
+
+
+
+
+
+
+
+
+
+
+        /*
         public static List<object> LoadResearchers()
         {
             List<object> Researchers = new List<object>();
 
             MySqlConnection conn = GetConnection();
-            if (conn != null) { Console.WriteLine("connection made (conn != null)"); }
             MySqlDataReader rdr = null;
 
             try
             {
-                Console.WriteLine("trying to open connection");
+
                 conn.Open();
-                Console.WriteLine("connection opened");
                 //When referenceing                         0   1     2           3            4      5     6       7      8      9       10             11     12          13
                 MySqlCommand cmd = new MySqlCommand("select id, type, given_name, family_name, title, unit, campus, email, photo, degree, supervisor_id, level, utas_start, current_start from researcher", conn);
-                Console.WriteLine("cmd var made");
                 rdr = cmd.ExecuteReader();
-                Console.WriteLine("rdr var made");
 
                 while (rdr.Read())
                 {
@@ -226,31 +459,10 @@ namespace Assignemt_2
                 }
             }
 
-
-
-
-            
-
-
             return publications;
         }
+        */
 
-
-        public static List<String> LoadStdntSupervised(MySqlCommand cmd, int supervisor)
-        {
-            MySqlDataReader srdr = cmd.ExecuteReader();
-
-            List<String> StudentsSupervised = new List<String>();
-
-            while (srdr.Read())
-            {
-                if (srdr.GetInt32(10) == supervisor)
-                {
-                    StudentsSupervised.Add(srdr.GetString(2) + " " + srdr.GetString(2));
-                }
-            }
-
-            return StudentsSupervised;
-        }
+        
     }
 }
