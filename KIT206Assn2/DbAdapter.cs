@@ -194,7 +194,7 @@ namespace Assignemt_2
             return researcher;
         }
 
-
+        //the variable reseacher is the researchers name and must be the first and last name with a space in between
         public static List<Publication> fetchBasicPublicationDetails(MySqlConnection conn, String reseacher)
         {           
             //When referenceing                          0    1      2        3
@@ -282,13 +282,50 @@ namespace Assignemt_2
             return publication;
         }
 
-        /*
-        public static List<int> fetchPublicaionCount()
+        
+
+        //----------------------not finished---------------------------
+        //fetches a list of the number of publications for a researcher starting with the year they started working
+        public static List<int> fetchPublicaionCount(DateTime startDate, DateTime finishDate, int Id)
         {
             MySqlConnection conn = GetConnection();
             MySqlDataReader rdr = null;
+            String name;
+            List<int> PubCount = new List<int>();
+
+            try
+            {
+                conn.Open();
+                //When referenceing                         0   1     2           3            4      5     6       7      8      9       10             11     12          13
+                MySqlCommand cmd = new MySqlCommand("select id, type, given_name, family_name, title, unit, campus, email, photo, degree, supervisor_id, level, utas_start, current_start from researcher", conn);
+                rdr = cmd.ExecuteReader();
+                rdr.Read();
+                name = rdr.GetString(2) + " " + rdr.GetString(3);
+                rdr.Close();
+                List<Publication> publications = fetchBasicPublicationDetails(conn, name);
+                rdr = cmd.ExecuteReader();
+
+
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("error counting publications: " + e);
+            }
+            finally
+            {
+
+            }
+
+
+
+
+
+
+            return PubCount;
         }
-        */
+        
 
         public static List<String> LoadStdntSupervised(MySqlCommand cmd, int supervisor)
         {
