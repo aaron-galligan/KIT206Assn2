@@ -26,24 +26,18 @@ namespace Assignemt_2
         // returns a list of researchers with the following order, A, B, C, D, E, Student
         public static List<Researcher> filterByLevel(List<Researcher> researchers)
         {
-            List<Researcher> filteredResearchers = new List<Researcher>();
+            List<Researcher> filteredResearchers = new List<Researcher>()
 
             int length = researchers.Count;
 
             for (int i = 0; i < length; i++)
             {
-                if (researchers[i]. = )
-            }
+                DbAdapter.getLevel(researchers[i].Id)
 
-            foreach (Student s in researchers)
-            {
                 
-            }
-
-            foreach (Staff staf in researchers){
 
             }
-
+            
 
 
             return null;

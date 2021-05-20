@@ -27,7 +27,7 @@ namespace Assignemt_2
 
         }
 
-        public static void filterByYearRande(int startYear, int finishYear)
+        public static void filterByYearRange(int startYear, int finishYear)
         {
 
         }

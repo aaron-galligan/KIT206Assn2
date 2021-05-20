@@ -286,12 +286,13 @@ namespace Assignemt_2
 
         //----------------------not finished---------------------------
         //fetches a list of the number of publications for a researcher starting with the year they started working
-        public static List<int> fetchPublicaionCount(DateTime startDate, DateTime finishDate, int Id)
+        public static List<Publication> fetchPublicaionCount(DateTime startDate, DateTime finishDate, int Id)
         {
             MySqlConnection conn = GetConnection();
             MySqlDataReader rdr = null;
             String name;
             List<int> PubCount = new List<int>();
+            List<Publication> publications = null;
 
             try
             {
@@ -302,10 +303,8 @@ namespace Assignemt_2
                 rdr.Read();
                 name = rdr.GetString(2) + " " + rdr.GetString(3);
                 rdr.Close();
-                List<Publication> publications = fetchBasicPublicationDetails(conn, name);
+                publications = fetchBasicPublicationDetails(conn, name);
                 rdr = cmd.ExecuteReader();
-
-
 
 
             }
@@ -315,17 +314,20 @@ namespace Assignemt_2
             }
             finally
             {
+                if (rdr != null)
+                {
+                    rdr.Close();
+                }
 
+                if (conn != null)
+                {
+                    conn.Close();
+                }
             }
 
-
-
-
-
-
-            return PubCount;
+            return publications;
         }
-        
+
 
         public static List<String> LoadStdntSupervised(MySqlCommand cmd, int supervisor)
         {
@@ -345,28 +347,15 @@ namespace Assignemt_2
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-        /*
-        public static List<object> LoadResearchers()
+        public static char getLevel(int Id)
         {
-            List<object> Researchers = new List<object>();
+            char Level = 'n';
 
             MySqlConnection conn = GetConnection();
             MySqlDataReader rdr = null;
 
             try
             {
-
                 conn.Open();
                 //When referenceing                         0   1     2           3            4      5     6       7      8      9       10             11     12          13
                 MySqlCommand cmd = new MySqlCommand("select id, type, given_name, family_name, title, unit, campus, email, photo, degree, supervisor_id, level, utas_start, current_start from researcher", conn);
@@ -374,69 +363,22 @@ namespace Assignemt_2
 
                 while (rdr.Read())
                 {
-                    String Type = rdr.GetString(1);
-
-                    String name = rdr.GetString(2) + " " + rdr.GetString(3);
-
-                    rdr.Close();
-                    //List<Publication> publications = LoadPublications(conn, name);
-                    rdr = cmd.ExecuteReader();
-
-                    if (Type == "Staff")
+                    if (rdr.GetInt32(0) == Id)
                     {
-                        int staffId = rdr.GetInt32(0);
-                        rdr.Close();
-                        List<String> Students = LoadStdntSupervised(cmd, staffId);
-                        rdr = cmd.ExecuteReader();
-
-                        Researchers.Add(new Staff
+                        if (rdr.GetString(1) == "Staff")
                         {
-                            Id = rdr.GetInt32(0),
-                            GivenName = rdr.GetString(2),
-                            FamilyName = rdr.GetString(3),
-                            Title = ParseEnum<Title>(rdr.GetString(4)),
-                            Unit = rdr.GetString(5),
-                            Campus = ParseEnum<Campus>(rdr.GetString(6)),
-                            Email = rdr.GetString(7),
-                            Photo = rdr.GetString(8),
-                            level = rdr.GetChar(11),
-                            CommenceInstDate = DateTime.Parse(rdr.GetString(12)),
-                            CommencePosDate = DateTime.Parse(rdr.GetString(13)),
-                            StudentsSupervised = Students,
-                            //Publications = publications
-                        }); ;
-
-
-                    }
-                    else if (Type == "Student")
-                    {
-
-
-                        Researchers.Add(new Student
+                            Level = Char.ToLower(rdr.GetChar(11));
+                        }
+                        else
                         {
-                            Id = rdr.GetInt32(0),
-                            GivenName = rdr.GetString(2),
-                            FamilyName = rdr.GetString(3),
-                            Title = ParseEnum<Title>(rdr.GetString(4)),
-                            Unit = rdr.GetString(5),
-                            Campus = ParseEnum<Campus>(rdr.GetString(6)),
-                            Email = rdr.GetString(7),
-                            Photo = rdr.GetString(8),
-                            Degree = rdr.GetString(9),
-                            CommenceInstDate = DateTime.Parse(rdr.GetString(12)),
-                            CommencePosDate = DateTime.Parse(rdr.GetString(13)),
-                            //Publications = publications
-                        });
-                    }
-                    else
-                    {
-                        Console.WriteLine("Does not have a type");
+                            Level = 's';
+                        }
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("error loading in researches" + e);
+                Console.WriteLine("Error loading in full researcher details:" + e);
             }
             finally
             {
@@ -451,55 +393,11 @@ namespace Assignemt_2
                 }
             }
 
-            return Researchers;
+            return Level;
         }
 
-
-        public static List<Publication> LoadPublications(MySqlConnection conn, String reseacher)
-        {
-            //When referenceing                          0    1      2        3     4     5        6
-            MySqlCommand cmd = new MySqlCommand("select doi, title, authors, year, type, cite_as, available from publication", conn);
-            MySqlDataReader prdr = null;
-            List<Publication> publications = new List<Publication>();
-
-
-            try
-            {
-                prdr = cmd.ExecuteReader();
-
-                while (prdr.Read())
-                {
-                    if ((prdr.GetString(2)).Contains(reseacher))
-                    {
-                        publications.Add(new Publication
-                        {
-                            Doi = prdr.GetString(0),
-                            Title = prdr.GetString(1),
-                            Authors = prdr.GetString(2),
-                            Year = prdr.GetInt32(3),
-                            OutputType = ParseEnum<OutputType>(prdr.GetString(4)),
-                            Citation = prdr.GetString(5),
-                            Available = DateTime.Parse(prdr.GetString(6))
-                        });
-                    }
-                }
-            } 
-            catch(Exception e)
-            {
-                Console.WriteLine("error loading publications" + e);
-            }
-            finally
-            {
-                if (prdr != null)
-                {
-                    prdr.Close();
-                }
-            }
-
-            return publications;
-        }
-        */
-
-        
     }
+
+
+    
 }
