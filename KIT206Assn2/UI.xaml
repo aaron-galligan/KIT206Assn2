@@ -4,9 +4,97 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KIT206Assn2"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" d:DesignWidth="800" Background="White" Height="555">
     <Grid>
-            
+        <Grid.Background>
+            <ImageBrush/>
+        </Grid.Background>
+        <!--Defines the fileds-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="ResearcherListView" Width="190*" MinWidth="10"/>
+            <ColumnDefinition x:Name="ResearcherDetailView" Width="270*"/>
+            <ColumnDefinition x:Name="PublicationDetailView" Width="200*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--ResearcherListView-->
+        <StackPanel x:Name="ResearcherListViewField">
+            <StackPanel Orientation="Horizontal" Margin="10,10,10,0">
+                <Label Content="Filter By Name:" RenderTransformOrigin="1.295,1.692"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10,10,10,0">
+                <Label x:Name="ShowOptions" Content="Show:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="FilterDropBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="0,0,0,0">
+                <ListBox x:Name="ResearcherList" HorizontalAlignment="Left" Height="470" Margin="10,0,0,0" VerticalAlignment="Top" Width="208"/>
+            </StackPanel>
+        </StackPanel>
+        <!--photo-->
+        <Border BorderThickness="1" BorderBrush="Black" Margin="220,10,10,430" Grid.Column="1">
+            <Image x:Name="photo" HorizontalAlignment="Left" Height="109" VerticalAlignment="Top" Width="94" Margin="-1"/>
+        </Border>
+        <!--ResearcherDetailsView-->
+        <StackPanel x:Name="ResearcherDetailsViewField" Orientation="Vertical" Grid.Column="1">
+            <StackPanel x:Name="NameField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Name" Content="Name:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="TitleField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Title" Content="Title:" Grid.Column="1" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="UnitField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Unit" Content="Unit:" Grid.Column="1" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="CampusField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Campus" Content="Campus:" Grid.Column="1" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="EmailField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Email" Content="Email:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="CurrJobField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="CurrJob" Content="Current Job:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="CommIntField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="CommInt" Content="Commenced with institution:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="CommPosField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="CommPos" Content="Commenced current position:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="PreposField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="PrePos" Content="Previous position:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="TenureField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Tenure" Content="Tenure:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="PublicationField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Publication" Content="Publication:" Grid.Column="1" HorizontalAlignment="Left"/>
+            </StackPanel>
+            <StackPanel x:Name="_3YrAvgField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="_3YrAvg" Content="3-Year average:" Grid.Column="1" HorizontalAlignment="Left"/>
+            </StackPanel>
+            <StackPanel x:Name="PerformanceField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Performance" Content="Performance:" Grid.Column="1" HorizontalAlignment="Left"/>
+            </StackPanel>
+            <StackPanel x:Name="SupervisionField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Supervision" Content="Supervision:" Grid.Column="1" HorizontalAlignment="Left"/>
+            </StackPanel>
+            <StackPanel x:Name="DegreeField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Degree" Content="Degree:" Grid.Column="1" HorizontalAlignment="Left"/>
+            </StackPanel>
+            <StackPanel x:Name="SupervisorField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Supervor" Content="Supervor:" Grid.Column="1" HorizontalAlignment="Left"/>
+            </StackPanel>
+            <!--PublicationListView-->
+            <StackPanel x:Name="PublicationListViewField" Margin="10,0,10,10">
+                <ListBox x:Name="PublicationList" Height="125"/>
+            </StackPanel>
+        </StackPanel>
+        <!--PublicationDetailsView-->
+        <!--This should appear after clicking a publication from the PubList-->
+        <StackPanel x:Name="PublicationDetailsViewField" Orientation="Vertical" Grid.Column="2">
+            <StackPanel x:Name="DOIField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="DOI" Content="DOI:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <!--Title,Authors,Year,Type,CiteAs,Available,Age-->
+        </StackPanel>
     </Grid>
 </UserControl>
