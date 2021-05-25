@@ -18,6 +18,7 @@ namespace KIT206Assn2
     /// <summary>
     /// Interaction logic for UI.xaml
     /// </summary>
+    //private const string RESEARCHER_LIST_KEY = "researcherList";
     public partial class UI : UserControl
     {
         public UI()
