@@ -12,6 +12,6 @@ namespace Assignemt_2
         public double Performance { get; set; }
         public int Supervisions { get; set; }
         public List<String> StudentsSupervised { get; set; }
-        public Char level { get; set; }
+        
     }
 }
