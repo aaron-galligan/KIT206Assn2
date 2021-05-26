@@ -124,7 +124,7 @@ namespace Assignemt_2
 
                 List<Publication> publications;
                 String name = rdr.GetString(2) + " " + rdr.GetString(3);
-                publications = fetchBasicPublicationDetails(conn, name);
+                publications = fetchBasicPublicationDetails(name);
 
                 rdr = cmd.ExecuteReader();
 
@@ -303,7 +303,7 @@ namespace Assignemt_2
                 rdr.Read();
                 name = rdr.GetString(2) + " " + rdr.GetString(3);
                 rdr.Close();
-                publications = fetchBasicPublicationDetails(conn, name);
+                publications = fetchBasicPublicationDetails(name);
                 rdr = cmd.ExecuteReader();
 
 
