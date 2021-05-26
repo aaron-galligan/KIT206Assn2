@@ -33,7 +33,7 @@ namespace Assignemt_2
         public String Email { get; set; }
         public CurrentJobTitle CurrentJobTitle { get; set; }
         public String Photo { get; set; } //its a url, might be a different way to store it but string will work for now
-
+        public char level { get; set; } // if its a student then the char will be 's'
 
         public int PublicationsCount()
         {

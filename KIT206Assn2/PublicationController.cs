@@ -8,30 +8,42 @@ namespace Assignemt_2
 {
     class PublicationController
     {
-
-        public static List<Publication> loadPublications()
+        public static List<Publication> loadPublications(Researcher researcher)
         {
+            String name = researcher.GivenName + " " + researcher.FamilyName;
+            List<Publication> publications;
 
+            publications = DbAdaptor.fetchBasicPublicationDetails(name);
 
+            publications.Sort((p1, p2) => p1.Year.CompareTo(p2.Year));
+            publications.Reverse();
 
-            return null;
-        }
-        
-        public static void sortPublications()
-        {
-
-        }
-
-        public static void invertSort() 
-        {
-
+            return publications;
         }
 
-        public static void filterByYearRange(int startYear, int finishYear)
+        public static Publication loadPublicationDetails(Publication publication)
         {
-
+            return DbAdaptor.completePublicationDetails(publication);
         }
 
+
+        public static List<Publication> filterByYearRange(List<Publication> publications, int startyear, int endyear)
+        {
+            for (int i = 0; i < publications.Count(); i++)
+            {
+                if (publications[i].Year < startyear || publications[i].Year > endyear)
+                {
+                    publications.Remove(publications[i]);
+                }
+            }
+
+            return publications;
+        }
+
+        public static List<Publication> invertSort(List<Publication> publications)
+        {
+            return publications.Reverse();
+        }
 
         // returns a list of how many publications a researcher has published for a given start year finish
         public static List<int[]> CumulativeCount(DateTime startDate, DateTime finishDate, int Id)
@@ -41,6 +53,7 @@ namespace Assignemt_2
             int year = startDate.Year; // the year being counted
 
             List<Publication> publications = DbAdaptor.fetchPublicaionCount(Id);
+
 
             List<int[]> PubCount = new List<int[]>();
 
@@ -59,7 +72,6 @@ namespace Assignemt_2
                 PubCount.Add(yearCount);
                 year++;
             }
-
 
             return PubCount;
         }

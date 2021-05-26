@@ -124,7 +124,7 @@ namespace Assignemt_2
 
                 List<Publication> publications;
                 String name = rdr.GetString(2) + " " + rdr.GetString(3);
-                publications = fetchBasicPublicationDetails(conn, name);
+                publications = fetchBasicPublicationDetails(name);
 
                 rdr = cmd.ExecuteReader();
 
@@ -164,6 +164,7 @@ namespace Assignemt_2
                                 Email = rdr.GetString(7),
                                 Photo = rdr.GetString(8),
                                 Degree = rdr.GetString(9),
+                                level = 's',
                                 CommenceInstDate = DateTime.Parse(rdr.GetString(12)),
                                 CommencePosDate = DateTime.Parse(rdr.GetString(13)),
                                 Publications = publications
@@ -195,9 +196,10 @@ namespace Assignemt_2
         }
 
         //the variable reseacher is the researchers name and must be the first and last name with a space in between
-        public static List<Publication> fetchBasicPublicationDetails(MySqlConnection conn, String reseacher)
-        {           
+        public static List<Publication> fetchBasicPublicationDetails(String reseacher)
+        {
             //When referenceing                          0    1      2        3
+            MySqlConnection conn = GetConnection();
             MySqlCommand cmd = new MySqlCommand("select doi, title, authors, year from publication", conn);
             MySqlDataReader rdr = null;
             List<Publication> publications = new List<Publication>();
@@ -284,9 +286,7 @@ namespace Assignemt_2
 
         
 
-        //----------------------not finished---------------------------
-        //fetches a list of the number of publications for a researcher starting with the year they started working
-        public static List<Publication> fetchPublicaionCount(DateTime startDate, DateTime finishDate, int Id)
+        public static List<Publication> fetchPublicaionCount(int Id)
         {
             MySqlConnection conn = GetConnection();
             MySqlDataReader rdr = null;
@@ -303,7 +303,7 @@ namespace Assignemt_2
                 rdr.Read();
                 name = rdr.GetString(2) + " " + rdr.GetString(3);
                 rdr.Close();
-                publications = fetchBasicPublicationDetails(conn, name);
+                publications = fetchBasicPublicationDetails(name);
                 rdr = cmd.ExecuteReader();
 
 
