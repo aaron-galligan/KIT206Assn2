@@ -22,11 +22,12 @@
                 <Label Content="Filter By Name:" RenderTransformOrigin="1.295,1.692"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10,10,10,0">
-                <Label x:Name="ShowOptions" Content="Show:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="Show" Content="Show:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
                 <ComboBox x:Name="FilterDropBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="0,0,0,0">
                 <ListBox x:Name="ResearcherList" HorizontalAlignment="Left" Height="470" Margin="10,0,0,0" VerticalAlignment="Top" Width="208"/>
+                <!--" ItemSource="{Binding Source = {StaticResource researcherList}}"/>-->
             </StackPanel>
         </StackPanel>
         <!--photo-->
@@ -94,7 +95,28 @@
             <StackPanel x:Name="DOIField" Orientation="Horizontal" Margin="10,0,10,0">
                 <Label x:Name="DOI" Content="DOI:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </StackPanel>
-            <!--Title,Authors,Year,Type,CiteAs,Available,Age-->
+            <StackPanel x:Name="PTitleField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="PTitle" Content="Title:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="AuthorsField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Authors" Content="Authors:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="YearField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Year" Content="Year:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="TypeField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Type" Content="Type:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="CiteAsField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="CiteAs" Content="Cite as:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="AvlField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Avl" Content="Available:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel x:Name="AgeField" Orientation="Horizontal" Margin="10,0,10,0">
+                <Label x:Name="Age" Content="Age:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+
         </StackPanel>
     </Grid>
 </UserControl>

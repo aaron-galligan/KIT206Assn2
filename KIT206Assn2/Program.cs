@@ -10,11 +10,8 @@ namespace Assignemt_2
     {
         static void Main(string[] args)
         {
-
-            List<Researcher> researchers = DbAdaptor.fetchBasicResearcherDetails();
-
-
-
+          
+          //  List<object> researchers = DbAdaptor.fetchBasicResearcherDetails()
 
             Console.WriteLine("Press the any key to exit");
             Console.ReadLine();
